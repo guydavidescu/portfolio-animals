@@ -32,26 +32,24 @@ pipeline {
         }
 
 
-    //     stage("Build Portfolio image chec") {
-    //         steps {
-    //             sh "docker build -t ${IMAGE_REPO_NAME} ."
-    //         }
-    //     }
+        stage("Build Portfolio image chec") {
+             steps {
+                 sh "docker build -t ${IMAGE_REPO_NAME} ."
+             }
+         }
 
-    //     stage('Test App container') {
-    //            steps {
+        stage('Test App container') {
+                steps {
                     
-    //                 sh """
-    //                 docker-compose build --no-cache
-    //                 docker-compose up -d 
-    //                 docker cp ./nginx/nginx.conf  portfolio_main_reverseproxy_1:/etc/nginx/conf.d
-    //                 docker cp ./templates  portfolio_main_reverseproxy_1:/usr/share/nginx/html
-    //                 docker cp ./db/setup.sql  portfolio_main_db_1:/docker-entrypoint-initdb.d/
-    //                 sleep 10
-    //                 curl 18.130.189.49:80
-    //                 """
-    //                 }
-    //             }
+                    sh """
+                    docker-compose build --no-cache
+                    docker-compose up -d 
+                    
+                    sleep 10
+                    curl 18.130.189.49:80
+                    """
+                    }
+                }
 
 
     //      stage('Test E2E') {
@@ -64,6 +62,30 @@ pipeline {
     //                 """
     //                 }
     //             }
+
+
+        // stage("Tagging commit and tags"){
+        //             when {
+        //                 branch 'main'
+        //             }
+        //             steps{
+        //                 script{
+        //                         message = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
+        //                     if(message.contains("version/*")){
+        //                         Ver_Calc=sh (script: "bash tags-init.sh ",returnStdout: true).trim()
+        //                         echo "${Ver_Calc}"
+        //                         sh  """
+        //                             git tag --list
+        //                             git switch main
+        //                             git fetch origin --tags
+        //                             git tag ${Ver_Calc}
+        //                             git push origin ${Ver_Calc}
+        //                             git fetch
+        //                             """
+        //                 }
+        //             }
+        //         }
+
 
        
     //     stage('Push App Image') {
