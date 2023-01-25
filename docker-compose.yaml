@@ -35,6 +35,9 @@ services:
       - "80:80"
     depends_on:
       - app
+    volumes:
+      - ./templates:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro  
 
 volumes:
   mongo-data:
