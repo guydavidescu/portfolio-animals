@@ -3,5 +3,4 @@ WORKDIR /app
 COPY . /app
 COPY app.py /app
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python", "app.py"]
 CMD ["sleep", "infinity"]
