@@ -44,7 +44,7 @@ pipeline {
                     sh """
                     docker-compose up -d --build
                     
-                    sleep 10
+                    sleep 5
                     curl 18.130.189.49:80
                     """
                     }
