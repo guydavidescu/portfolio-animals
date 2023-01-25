@@ -1,2 +1,1 @@
-GET Request to / was successful.
-POST Request to /new-quote was successful.
+

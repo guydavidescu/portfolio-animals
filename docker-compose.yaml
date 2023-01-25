@@ -27,14 +27,14 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5  
-  reverseproxy:
-    image: nginx
+  nginx:
+    build: 
+      context: .
+      dockerfile: nginx.dockerfile
     ports:
       - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx.conf                                     
-      - ./templates/home.html:/usr/share/nginx/html/home.html
-    depends_on: 
-      - app 
+    depends_on:
+      - app
+
 volumes:
   mongo-data:

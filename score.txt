@@ -1,0 +1,8 @@
+GET Request to / was successful.
+POST Request to /animals failed.
+PUT Request to /animals failed.
+DELETE Request to /animals failed.
+GET Request to / was successful.
+POST Request to /animals failed.
+PUT Request to /animals failed.
+DELETE Request to /animals failed.

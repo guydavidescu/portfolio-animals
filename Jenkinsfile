@@ -52,16 +52,16 @@ pipeline {
                 }
 
 
-    //      stage('Test E2E') {
-    //            steps {
+         stage('Test E2E') {
+               steps {
                     
-    //                 sh """
-    //                 chmod 777 test/test.sh
-    //                 ./test/test.sh
-    //                 docker-compose down
-    //                 """
-    //                 }
-    //             }
+                    sh """
+                    chmod 777 test/test.sh
+                    ./test/test.sh
+                    docker-compose down
+                    """
+                    }
+                }
 
 
         // stage("Tagging commit and tags"){
