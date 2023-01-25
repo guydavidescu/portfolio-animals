@@ -61,25 +61,23 @@ def add_animal():
 def update_animal(animal_id):
     db = get_db()
     col= db["animal_tb"]
-    _animals = col.find()
-    animal_data = request.get_json(force=True)["name"]
-    result = col.update_one({"_id":ObjectId(animal_id)}, {"$set": {"name": animal_data}})
+    animal_data = request.get_json(force=True)
+    result = col.update_one({"_id": ObjectId(animal_id)}, {"$set": animal_data})
     if result.modified_count:
         return jsonify({"message": "Animal updated successfully"})
     else:
-        return jsonify({"error": "Animals not found"})       
+        return jsonify({"error": "Animals not found"}), 404    
 
 # Handle DELETE request to delete an animal
 @app.route("/animals/<animal_id>", methods=["DELETE"])
 def delete_animal(animal_id):
     db = get_db()
     col= db["animal_tb"]
-    # _animals = col.find()({"id": animal_id})
-    result = col.delete_one({"_id":ObjectId(animal_id)})
+    result = col.delete_one({"_id": ObjectId(animal_id)})
     if result.deleted_count:
-        return jsonify({"message": "Animals deleted successfully"})
+        return jsonify({"message": "Animal deleted successfully"})
     else:
-        return jsonify({"error": "Animals not found"})
+        return jsonify({"error": "Animals not found"}), 404
 
 
 if __name__ == "__main__":
