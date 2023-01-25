@@ -12,14 +12,14 @@ services:
       db:
         condition: service_healthy  
   db:
-    image: mongo:4.2
+    build: 
+      context: .
+      dockerfile: mongo-db.dockerfile
     hostname: test_mongodb
     environment:
       - MONGO_INITDB_DATABASE=animal_db
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-    volumes:
-      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+      - MONGO_INITDB_ROOT_PASSWORD=pass  
     ports:
       - 27017:27017
     healthcheck:
