@@ -16,91 +16,91 @@ pipeline {
             }
         }
       
-        // stage ("aws login"){
-        //     steps{
-        //         script{
-        //             sh """
-        //             apt update
-        //             apt install -y awscli
-        //             aws configure set aws_access_key_id AKIAZMC2XWDGO6KFC6FA
-        //             aws configure set aws_secret_access_key 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
-        //             aws configure set default.region eu-west-2
-        //             aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-        //             """
-        //         }
-        //     }
-        // }
+        stage ("aws login"){
+            steps{
+                script{
+                    sh """
+                    apt update
+                    apt install -y awscli
+                    aws configure set aws_access_key_id AKIAZMC2XWDGO6KFC6FA
+                    aws configure set aws_secret_access_key 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
+                    aws configure set default.region eu-west-2
+                    aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+                    """
+                }
+            }
+        }
 
 
-        // stage("Build Portfolio image chec") {
-        //      steps {
-        //          sh "docker build -t ${IMAGE_REPO_NAME} ."
-        //      }
-        //  }
+        stage("Build Portfolio image chec") {
+             steps {
+                 sh "docker build -t ${IMAGE_REPO_NAME} ."
+             }
+         }
 
-        // stage('Test App container') {
-        //         steps {
+        stage('Test App container') {
+                steps {
                     
-        //             sh """
-        //             docker-compose up -d --build
+                    sh """
+                    docker-compose up -d --build
                     
-        //             sleep 5
-        //             curl 18.130.121.101:80
-        //             """
-        //             }
-        //         }
+                    sleep 5
+                    curl 18.130.121.101:80
+                    """
+                    }
+                }
 
 
-        //  stage('Test E2E') {
-        //        steps {
+         stage('Test E2E') {
+               steps {
                     
-        //             sh """
-        //             chmod 777 test/test.sh
-        //             ./test/test.sh
-        //             cat score.txt
-        //             docker-compose down
-        //             """
-        //             }
-        //         }
+                    sh """
+                    chmod 777 test/test.sh
+                    ./test/test.sh
+                    cat score.txt
+                    docker-compose down
+                    """
+                    }
+                }
 
 
-        // stage("Tagging commit and tags"){
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps{
-        //         script{
-        //             env.GIT_COMMIT_MSG = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
-        //             if(GIT_COMMIT_MSG.contains("version")){
-        //                withCredentials([gitUsernamePassword(credentialsId: "guy-token", gitToolName: 'Default')]){
-        //                     sh """
-        //                         git switch main
-        //                         git fetch origin --tags
-        //                         git tag --list
-        //                     """
-        //                     Ver_Calc=sh(script: "bash tag_calc.sh ${GIT_COMMIT_MSG}",returnStdout: true).trim()
-        //                     New_tag=Ver_Calc.split("\n").last()
-        //                     echo "${New_tag}"
-        //                     sh  """
-        //                         git tag ${New_tag}
-        //                         git push origin ${New_tag}
-        //                         git fetch
-        //                         """
-        //                }
-        //             }
-        //         }
-        //     }
-        // }
+        stage("Tagging commit and tags"){
+            when {
+                branch 'main'
+            }
+            steps{
+                script{
+                    env.GIT_COMMIT_MSG = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
+                    if(GIT_COMMIT_MSG.contains("version")){
+                       withCredentials([gitUsernamePassword(credentialsId: "guy-token", gitToolName: 'Default')]){
+                            sh """
+                                git switch main
+                                git fetch origin --tags
+                                git tag --list
+                            """
+                            Ver_Calc=sh(script: "bash tag_calc.sh ${GIT_COMMIT_MSG}",returnStdout: true).trim()
+                            New_tag=Ver_Calc.split("\n").last()
+                            echo "${New_tag}"
+                            sh  """
+                                git tag ${New_tag}
+                                git push origin ${New_tag}
+                                git fetch
+                                """
+                       }
+                    }
+                }
+            }
+        }
 
-        // stage('Push App to ECR') {
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps {
-        //         sh "docker tag ${IMAGE_REPO_NAME}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${New_tag}"
-        //         sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${New_tag}"
-        //     }
-        // }
+        stage('Push App to ECR') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh "docker tag ${IMAGE_REPO_NAME}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${New_tag}"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${New_tag}"
+            }
+        }
 
         stage('Deploy to Prod') {
               steps {
