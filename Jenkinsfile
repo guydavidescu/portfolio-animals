@@ -57,34 +57,40 @@ pipeline {
                     sh """
                     chmod 777 test/test.sh
                     ./test/test.sh
+                    cat score.txt
                     docker-compose down
                     """
                     }
                 }
 
 
-        // stage("Tagging commit and tags"){
-        //             when {
-        //                 branch 'main'
-        //             }
-        //             steps{
-        //                 script{
-        //                         message = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
-        //                     if(message.contains("version/*")){
-        //                         Ver_Calc=sh (script: "bash tags-init.sh ",returnStdout: true).trim()
-        //                         echo "${Ver_Calc}"
-        //                         sh  """
-        //                             git tag --list
-        //                             git switch main
-        //                             git fetch origin --tags
-        //                             git tag ${Ver_Calc}
-        //                             git push origin ${Ver_Calc}
-        //                             git fetch
-        //                             """
-        //                 }
-        //             }
-        //         }
-
+        stage("Tagging commit and tags"){
+            when {
+                branch 'main'
+            }
+            steps{
+                script{
+                    env.GIT_COMMIT_MSG = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
+                    if(GIT_COMMIT_MSG.contains("version")){
+                       
+                            sh """
+                                git switch main
+                                git fetch origin --tags
+                                git tag --list
+                            """
+                            Ver_Calc=sh(script: "bash tag_calc.sh ${GIT_COMMIT_MSG}",returnStdout: true).trim()
+                            New_tag=Ver_Calc.split("\n").last()
+                            echo "${New_tag}"
+                            sh  """
+                                git tag ${New_tag}
+                                git push origin ${New_tag}
+                                git fetch
+                                """
+                        
+                    }
+                }
+            }
+        }
 
        
     //     stage('Push App Image') {

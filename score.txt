@@ -1,5 +1,0 @@
-GET request to / was successful
-GET request to /animals was successful
-POST request to /animals was successful
-PUT Request to /animals/63d2423d35dc39baa1dcd9e8 was successful.
-DELETE Request to /animals/63d2423d35dc39baa1dcd9e8 was successful.
