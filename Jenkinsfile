@@ -92,7 +92,6 @@ pipeline {
             }
         }
 
-       
         stage('Push App to ECR') {
             when {
                 branch 'main'

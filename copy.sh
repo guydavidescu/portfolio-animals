@@ -9,3 +9,5 @@ sh "scp ./nginx/nginx.conf ssh ubuntu@18.170.27.109  /home/ubuntu/nginx/"
 sh "scp ./templates/home.html ssh ubuntu@18.170.27.109  /home/ubuntu/templates/"
 sh "scp ./deploy.sh ssh ubuntu@18.170.27.109  /home/ubuntu/deploy.sh"
 sh "ssh ubuntu@18.170.27.109   /home/ubuntu/deploy.sh"
+
+
