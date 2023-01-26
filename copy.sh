@@ -10,6 +10,6 @@
  scp ./nginx/nginx.conf ubuntu@18.170.27.109:/home/ubuntu
  scp ./templates/home.html ubuntu@18.170.27.109:/home/ubuntu
  scp ./deploy.sh ubuntu@18.170.27.109:/home/ubuntu
- ssh ./ubuntu@18.170.27.109
+ ssh -t ./ubuntu@18.170.27.109
 
 
