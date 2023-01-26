@@ -107,7 +107,7 @@ pipeline {
               steps {
                   sh """
                   chmod 777 copy.sh 
-                  ./copy.sh ${New_tag}"
+                  ./copy.sh ${New_tag}
                   """
               }
          }
