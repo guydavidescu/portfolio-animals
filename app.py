@@ -57,8 +57,6 @@ def add_animal():
     return jsonify({"_id": str(result.inserted_id)})
 
 
-
-
 # Handle PUT request to update an animal
 @app.route("/animals/<animal_id>", methods=["PUT"])
 def update_animal(animal_id):

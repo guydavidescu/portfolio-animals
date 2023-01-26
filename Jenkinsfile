@@ -103,20 +103,12 @@ pipeline {
             }
         }
 
-    //         stage('Deploy') {
-    //           steps {
-    //               sh """ 
-    //               scp deploy.sh ubuntu@18.130.170.162:/home/ubuntu
-    //               scp app.py ubuntu@18.130.170.162:/home/ubuntu
-    //               scp docker-compose.yaml ubuntu@18.130.170.162:/home/ubuntu
-    //               scp dockerfile ubuntu@18.130.170.162:/home/ubuntu
-    //               scp Dockerfile  ubuntu@18.130.170.162:/home/ubuntu
-    //               scp templates/index.html ubuntu@18.130.170.162:/home/ubuntu
-    //               scp requirements.txt ubuntu@18.130.170.162:/home/ubuntu
-    //               ssh ubuntu@18.130.170.162 /home/ubuntu/deploy.sh
-    //               """
-    //           }
-    //      }
+        stage('Deploy to Prod') {
+              steps {
+                  sh " ./copy.sh ${New_tag}"
+                  
+              }
+         }
 
        }
     }
