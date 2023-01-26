@@ -72,7 +72,7 @@ pipeline {
                 script{
                     env.GIT_COMMIT_MSG = sh(script: "git log -1 --pretty=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
                     if(GIT_COMMIT_MSG.contains("version")){
-                       
+                       withCredentials([gitUsernamePassword(credentialsId: "guy-token", gitToolName: 'Default')]){
                             sh """
                                 git switch main
                                 git fetch origin --tags
@@ -86,7 +86,7 @@ pipeline {
                                 git push origin ${New_tag}
                                 git fetch
                                 """
-                        
+                       }
                     }
                 }
             }
