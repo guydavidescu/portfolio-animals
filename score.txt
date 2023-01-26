@@ -1,13 +1,5 @@
-GET Request to / was successful.
-POST Request to /animals failed.
-PUT Request to /animals failed.
-DELETE Request to /animals failed.
-
-GET Request to / was successful.
-POST Request to /animals was successful.
-GET Request to /animals/ failed.
-PUT Request to /animals/ failed.
-DELETE Request to /animals/ failed.
-PUT Request to /animals/ failed.
-PUT Request to /animals/ failed.
-DELETE Request to /animals/ failed.
+GET request to / was successful
+GET request to /animals was successful
+POST request to /animals was successful
+PUT Request to /animals/63d2423d35dc39baa1dcd9e8 was successful.
+DELETE Request to /animals/63d2423d35dc39baa1dcd9e8 was successful.

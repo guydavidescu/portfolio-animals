@@ -45,22 +45,22 @@ pipeline {
                     docker-compose up -d --build
                     
                     sleep 5
-                    curl 18.130.189.49:80
+                    curl 18.130.121.101:80
                     """
                     }
                 }
 
 
-        //  stage('Test E2E') {
-        //        steps {
+         stage('Test E2E') {
+               steps {
                     
-        //             sh """
-        //             chmod 777 test/test.sh
-        //             ./test/test.sh
-        //             docker-compose down
-        //             """
-        //             }
-        //         }
+                    sh """
+                    chmod 777 test/test.sh
+                    ./test/test.sh
+                    docker-compose down
+                    """
+                    }
+                }
 
 
         // stage("Tagging commit and tags"){

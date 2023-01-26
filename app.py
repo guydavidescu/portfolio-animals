@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, request
 import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from random import choice
 
 
 app = Flask(__name__)
@@ -56,6 +57,8 @@ def add_animal():
     return jsonify({"_id": str(result.inserted_id)})
 
 
+
+
 # Handle PUT request to update an animal
 @app.route("/animals/<animal_id>", methods=["PUT"])
 def update_animal(animal_id):
@@ -66,7 +69,7 @@ def update_animal(animal_id):
     if result.modified_count:
         return jsonify({"message": "Animal updated successfully"})
     else:
-        return jsonify({"error": "Animals not found"}), 404    
+        return jsonify({"error": "Animals not found"}), 404   
 
 # Handle DELETE request to delete an animal
 @app.route("/animals/<animal_id>", methods=["DELETE"])
@@ -78,6 +81,15 @@ def delete_animal(animal_id):
         return jsonify({"message": "Animal deleted successfully"})
     else:
         return jsonify({"error": "Animals not found"}), 404
+
+
+@app.route("/id_for_testing")
+def id_for_testing():
+    db = get_db()
+    col= db["animal_tb"]
+    result = list(col.find({}, {"_id": 1}))
+    random_id = choice(result)["_id"]
+    return str(random_id)
 
 
 if __name__ == "__main__":
