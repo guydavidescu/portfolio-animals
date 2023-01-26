@@ -105,8 +105,10 @@ pipeline {
 
         stage('Deploy to Prod') {
               steps {
-                  sh " ./copy.sh ${New_tag}"
-                  
+                  sh """
+                  chmod 777 copy.sh 
+                  ./copy.sh ${New_tag}"
+                  """
               }
          }
 
