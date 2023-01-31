@@ -1,0 +1,5 @@
+GET request to / was successful
+GET request to /animals was successful
+POST request to /animals was successful
+POST Request to /animals/63d916d6d954b626e70e6ff5/update was successful.
+POST Request to /animals/63d916d6d954b626e70e6ff5/delete was successful.

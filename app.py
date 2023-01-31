@@ -3,6 +3,9 @@ import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from random import choice
+import bson
+from bson import ObjectId
+from bson.errors import InvalidId
 
 
 app = Flask(__name__)
@@ -22,19 +25,19 @@ def ping_server():
 
 @app.route("/animals", methods=["GET"])
 def get_stored_animals():
-    db = get_db()
     try:
         db = get_db()
         col= db["animal_tb"]
         _animals = col.find()
         animals = [{ "name": animal["name"], "type": animal["type"]} for animal in _animals]
         return jsonify({"animals": animals})
-    except:
-        pass
+    except Exception as e:
+        return jsonify({"error": f"Error while fetching animals: {str(e)}"}), 500
     finally:
-        if type(db)==MongoClient:
+        if type(db) == MongoClient:
             db.close()
-
+    
+            
 # Handle GET request to get a specific animal
 @app.route("/animals/<animal_id>", methods=["GET"])
 def get_animal(animal_id):
@@ -46,40 +49,54 @@ def get_animal(animal_id):
     else:
         return jsonify({"error": "Animal not found"}), 404
 
-# Handle POST request to add a new animal
 @app.route("/animals", methods=["POST"])
 def add_animal():
     db = get_db()
     col= db["animal_tb"]
-    _animals = col.find()
-    animal_data = request.get_json()
+    name = request.form.get("name")
+    type = request.form.get("type")
+    animal_data = {
+        "name": name,
+        "type": type
+    }
     result = col.insert_one(animal_data)
-    return jsonify({"_id": str(result.inserted_id)})
+    return jsonify({"_id": str(result.inserted_id)},{"message": "Animal added successfully"})
 
-
-# Handle PUT request to update an animal
-@app.route("/animals/<animal_id>", methods=["PUT"])
+@app.route("/animals/<animal_id>/update", methods=["POST"])
 def update_animal(animal_id):
+    animal_id = request.form.get("animal_id")
+    animal_id = ObjectId(animal_id)
+    
     db = get_db()
-    col= db["animal_tb"]
-    animal_data = request.get_json(force=True)
-    result = col.update_one({"_id": ObjectId(animal_id)}, {"$set": animal_data})
-    if result.modified_count:
-        return jsonify({"message": "Animal updated successfully"})
-    else:
-        return jsonify({"error": "Animals not found"}), 404   
+    col = db["animal_tb"]
+    name = request.form.get("name")
+    type = request.form.get("type")
+    animal_data = {"name": name, "type": type}
+    col.update_one({"_id": animal_id}, {"$set": animal_data})
+    return jsonify({"message": "Animal updated successfully"})
 
-# Handle DELETE request to delete an animal
-@app.route("/animals/<animal_id>", methods=["DELETE"])
+@app.route("/animals/<animal_id>/delete", methods=["POST"])
 def delete_animal(animal_id):
+    animal_id = request.form.get("animal_id")
+    animal_id = ObjectId(animal_id)
+    
     db = get_db()
-    col= db["animal_tb"]
-    result = col.delete_one({"_id": ObjectId(animal_id)})
-    if result.deleted_count:
-        return jsonify({"message": "Animal deleted successfully"})
-    else:
-        return jsonify({"error": "Animals not found"}), 404
+    col = db["animal_tb"]
 
+    try:
+        animal_id = ObjectId(animal_id)
+    except bson.errors.InvalidId:
+        return jsonify({"error": "Invalid ObjectId"}), 400
+
+    animal = col.find_one({"_id": animal_id})
+    if animal is None:
+        return jsonify({"error": "Animal not found"}), 404
+
+    result = col.delete_one({"_id": animal_id})
+    if result.deleted_count == 0:
+        return jsonify({"error": "Failed to delete animal"}), 500
+
+    return jsonify({"message": "Animal deleted successfully"})
 
 @app.route("/id_for_testing")
 def id_for_testing():

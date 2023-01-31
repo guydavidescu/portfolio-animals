@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the base URL of the API
-API_URL="18.130.121.101"
+API_URL="18.132.41.185"
 
 # Test GET request to /
 
@@ -38,23 +38,22 @@ fi
 
 animal_id=$(curl -s $API_URL/id_for_testing)
 
-# Test PUT request to /animals/<animal_id>
+# Test POST request to /animals/<animal_id>/update
 
-response=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -H "Content-Type: application/json" -d '{"name":"tiger"}' "$API_URL/animals/$animal_id")
+response=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d '{"animal_id":"'$animal_id'", "name":"tiger", "type":"mammal"}' "$API_URL/animals/$animal_id/update")
 RESPONSES+=("$response")
 if [[ $response == "200" ]]; then
-  echo "PUT Request to /animals/$animal_id was successful." >> score.txt
+  echo "POST Request to /animals/$animal_id/update was successful." >> score.txt
 else
-  echo "PUT Request to /animals/$animal_id failed." >> score.txt
+  echo "POST Request to /animals/$animal_id/update failed." >> score.txt
 fi
 
-# Test DELETE request to /animals/<animal_id>
+# Test POST request to /animals/<animal_id>/delete
 
-response=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "$API_URL/animals/$animal_id")
+response=$(curl -s -o /dev/null -w "%{http_code}" -X POST -d "animal_id=$animal_id" "$API_URL/animals/$animal_id/delete")
 RESPONSES+=("$response")
 if [[ $response == "200" ]]; then
-  echo "DELETE Request to /animals/$animal_id was successful." >> score.txt
+echo "POST Request to /animals/$animal_id/delete was successful." >> score.txt
 else
-  echo "DELETE Request to /animals/$animal_id failed." >> score.txt
-
+echo "POST Request to /animals/$animal_id/delete failed." >> score.txt
 fi
