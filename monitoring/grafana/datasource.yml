@@ -1,0 +1,26 @@
+apiVersion: 1
+
+datasources:
+ - name: Graphite
+   type: graphite
+   access: proxy
+   orgId: 1
+   url: http://localhost:9090
+   user:
+   database:
+   basicAuth:
+   basicAuthUser:
+   withCredentials:
+   isDefault:
+   jsonData:
+      graphiteVersion: "1.1"
+      tlsAuth: true
+      tlsAuthWithCACert: true
+      httpHeaderName1: "Authorization"
+   secureJsonData:
+     tlsCACert: "..."
+     tlsClientCert: "..."
+     tlsClientKey: "..."
+     httpHeaderValue1: "Bearer xf5yhfkpsnmgo"
+   version: 1
+   editable: false
