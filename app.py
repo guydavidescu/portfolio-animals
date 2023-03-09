@@ -12,6 +12,7 @@ from prometheus_flask_exporter import PrometheusMetrics
 app = Flask(__name__)
 metrics= PrometheusMetrics(app, group_by='endpoint')
 
+
 def get_db():
     client = MongoClient(host='test_mongodb',
                          port=27017, 
